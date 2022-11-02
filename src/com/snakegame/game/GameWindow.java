@@ -3,17 +3,26 @@ package com.snakegame.game;
 import javax.swing.*;
 import java.awt.*;
 
-public class GameWindow extends JFrame {
+import com.snakegame.utils.*;
+
+public class GameWindow extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
-	final static int ScreenWidth = 640;
-	final static int ScreenHeight = 420;
-	final static String WindowTitle = "Snake Game";
+	public final static int SCREEN_SIZE = 640;
 	
 	public GameWindow() {
 		super();
-		this.setVisible(true);
-		this.setTitle(GameWindow.WindowTitle);
-		this.setSize(new Dimension(GameWindow.ScreenWidth, GameWindow.ScreenHeight));
+		this.setBackground(Color.BLACK);
 	}
+	
+	@Override
+	protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.setColor(Color.DARK_GRAY);
+        
+        for(int line = 0; line < GameWindow.SCREEN_SIZE; line += Block.BLOCK_SIZE) {
+        	g.drawLine(line, 0, line, GameWindow.SCREEN_SIZE);
+        	g.drawLine(0, line, GameWindow.SCREEN_SIZE, line);
+        }
+    }
 }
