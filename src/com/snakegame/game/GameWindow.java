@@ -2,17 +2,29 @@ package com.snakegame.game;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import com.snakegame.utils.*;
 
-public class GameWindow extends JPanel {
+public class GameWindow extends JPanel implements ActionListener {
 	
 	private static final long serialVersionUID = 1L;
 	public final static int SCREEN_SIZE = 640;
+	private Snake snake;
+	private Timer timer;
+	public final static int DELAY = 200;
+	private Control control;
 	
 	public GameWindow() {
 		super();
+		this.snake = new Snake();
+		this.control = new Control(this.snake.getDirection());
+		this.addKeyListener(this.control);
+		this.setFocusable(true);
 		this.setBackground(Color.BLACK);
+		this.timer = new Timer(DELAY, this);
+		this.timer.start();
 	}
 	
 	@Override
@@ -24,5 +36,33 @@ public class GameWindow extends JPanel {
         	g.drawLine(line, 0, line, GameWindow.SCREEN_SIZE);
         	g.drawLine(0, line, GameWindow.SCREEN_SIZE, line);
         }
+        this.draw(g);
     }
+	
+	private void draw(Graphics g) {
+		g.setColor(Color.GREEN);
+		for(Block snakeBodyBlock : this.snake.getSnakeBody()) {
+			g.fillRect(snakeBodyBlock.getPosition().getPositionX(), snakeBodyBlock.getPosition().getPositionY(), Block.BLOCK_SIZE, Block.BLOCK_SIZE);
+		}
+	}
+	
+	private void listenToDirectionChanges() {
+		int snakeCurrentDirection = this.snake.getDirection();
+		int nextDirection = this.control.getDirection();
+		
+		if(snakeCurrentDirection == Directions.RIGHT && nextDirection == Directions.LEFT) return;
+		if(snakeCurrentDirection == Directions.LEFT && nextDirection == Directions.RIGHT) return;
+		if(snakeCurrentDirection == Directions.UP && nextDirection == Directions.DOWN) return;
+		if(snakeCurrentDirection == Directions.DOWN && nextDirection == Directions.UP) return;
+		
+		this.snake.setDirection(this.control.getDirection());
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		this.snake.move();
+		this.listenToDirectionChanges();
+		this.repaint();
+	}
+
 }
