@@ -13,13 +13,14 @@ public class GameWindow extends JPanel implements ActionListener {
 	public final static int SCREEN_SIZE = 640;
 	private Snake snake;
 	private Timer timer;
-	public final static int DELAY = 200;
+	public final static int DELAY = 100;
 	private Control control;
 	
 	public GameWindow() {
 		super();
 		this.snake = new Snake();
 		this.control = new Control(this.snake.getDirection());
+		this.setSize(new Dimension(GameWindow.SCREEN_SIZE, GameWindow.SCREEN_SIZE));
 		this.addKeyListener(this.control);
 		this.setFocusable(true);
 		this.setBackground(Color.BLACK);
@@ -30,20 +31,26 @@ public class GameWindow extends JPanel implements ActionListener {
 	@Override
 	protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setColor(Color.DARK_GRAY);
-        
-        for(int line = 0; line < GameWindow.SCREEN_SIZE; line += Block.BLOCK_SIZE) {
+        this.initGrapics(g);
+		this.draw(g);
+    }
+	
+	private void initGrapics(Graphics g) {
+		g.setColor(Color.DARK_GRAY);
+		        
+        for(int line = 0; line <= GameWindow.SCREEN_SIZE; line += Block.BLOCK_SIZE) {
         	g.drawLine(line, 0, line, GameWindow.SCREEN_SIZE);
         	g.drawLine(0, line, GameWindow.SCREEN_SIZE, line);
         }
-        this.draw(g);
-    }
+	}
 	
 	private void draw(Graphics g) {
 		g.setColor(Color.GREEN);
 		for(Block snakeBodyBlock : this.snake.getSnakeBody()) {
 			g.fillRect(snakeBodyBlock.getPosition().getPositionX(), snakeBodyBlock.getPosition().getPositionY(), Block.BLOCK_SIZE, Block.BLOCK_SIZE);
 		}
+		g.setColor(Color.RED);
+		g.fillRect(this.snake.getFood().getPosition().getPositionX(), this.snake.getFood().getPosition().getPositionY(), Block.BLOCK_SIZE, Block.BLOCK_SIZE);
 	}
 	
 	private void listenToDirectionChanges() {
@@ -62,7 +69,7 @@ public class GameWindow extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		this.snake.move();
 		this.listenToDirectionChanges();
-		this.repaint();
+		this.updateUI();
 	}
 
 }

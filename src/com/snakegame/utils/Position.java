@@ -25,4 +25,11 @@ public class Position {
 	public int getPositionY() {
 		return this.positionY;
 	}
+	
+	public boolean equals(Position other) {
+		if(other.positionX == this.positionX && other.positionY == this.positionY) {
+			return true;
+		}
+		return false;
+	}
 }
