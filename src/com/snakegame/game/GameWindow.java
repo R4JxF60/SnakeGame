@@ -31,11 +31,11 @@ public class GameWindow extends JPanel implements ActionListener {
 	@Override
 	protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        this.initGrapics(g);
+        this.initGraphics(g);
 		this.draw(g);
     }
 	
-	private void initGrapics(Graphics g) {
+	private void initGraphics(Graphics g) {
 		g.setColor(Color.DARK_GRAY);
 		        
         for(int line = 0; line <= GameWindow.SCREEN_SIZE; line += Block.BLOCK_SIZE) {
