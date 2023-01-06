@@ -2,3 +2,6 @@
 .classpath
 .settings
 .project
+.idea
+SnakeGame.iml
+out
